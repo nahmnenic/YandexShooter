@@ -30,12 +30,5 @@ namespace ScriptsMisha
             _playerLocomotion.HandleAllMovement();
             _playerActions.HandleAllActions();
         }
-
-        private void LateUpdate()
-        {
-            isInteracting = _animator.GetBool("isInteracting");
-            _playerLocomotion.IsJumping = _animator.GetBool("isJumping");
-            _animator.SetBool("isGrounded", _playerLocomotion.IsGrounded);
-        }
     }
 }

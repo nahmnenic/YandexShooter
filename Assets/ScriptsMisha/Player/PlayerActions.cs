@@ -40,11 +40,11 @@ namespace ScriptsMisha.Player
         {
             if (IsAiming)
             {
-                _animatorManager._animator.SetBool(Aiming,true);
+               // _animatorManager._animator.SetBool(Aiming,true);
             }
             else
             {
-                _animatorManager._animator.SetBool(Aiming,false);
+                //_animatorManager._animator.SetBool(Aiming,false);
             }
         }
     }

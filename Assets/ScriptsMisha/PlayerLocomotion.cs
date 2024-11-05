@@ -1,3 +1,5 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ScriptsMisha
@@ -10,7 +12,6 @@ namespace ScriptsMisha
         private Vector3 _moveDirection;
         private Transform _cameraObj;
         private Rigidbody _rb;
-        private bool _allowDoubleJump;
 
         [Header("Layer Check")]
         public LayerMask pozionLayer;
@@ -42,7 +43,6 @@ namespace ScriptsMisha
         [Header("Jump Speed")] 
         public float gravityIntensity;
         public float jumpHight;
-        public float secondJumpHight;
 
         [Header("OnlyWalk")]
         public bool IsAiming;
@@ -59,8 +59,8 @@ namespace ScriptsMisha
         public void HandleAllMovement()
         {
             HandleFallingAndLanding();
-
-            if (_palyerManager.isInteracting)
+            
+            if (!IsJumping && !IsGrounded)
                 return;
             HandleMovement();
         }
@@ -124,11 +124,6 @@ namespace ScriptsMisha
             
             if (!IsGrounded && !IsJumping)
             {
-                if (!_palyerManager.isInteracting)
-                {
-                    _animatorManager.PlayTargetAnimation("Falling", true);
-                }
-
                 inAirTimer += Time.deltaTime;
                 _rb.AddForce(transform.forward * leapingVelocity);
                 _rb.AddForce(-Vector3.up * fallingVelocity * inAirTimer);
@@ -136,11 +131,6 @@ namespace ScriptsMisha
 
             if (Physics.SphereCast(rayCastOrirgin, 0.2f, -Vector3.up, out hit,1f,groundLayer))
             {
-                if (!IsGrounded && !_palyerManager.isInteracting)
-                {
-                    _animatorManager.PlayTargetAnimation("Land", true);
-                }
-
                 Vector3 rayCastHitPoint = hit.point;
                 targetPosition.y = rayCastHitPoint.y;
                 inAirTimer = 0;
@@ -168,28 +158,22 @@ namespace ScriptsMisha
         {
             if (IsGrounded)
             {
-                _allowDoubleJump = true;
-                _animatorManager._animator.SetBool("isJumping", true);
-                _animatorManager.PlayTargetAnimation("Jump", false);
-
+                IsJumping = true;
+                StartCoroutine(TimeInJump());
                 float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * jumpHight);
                 Vector3 playerVelocity = _moveDirection;
                 playerVelocity.y = jumpingVelocity;
                 _rb.velocity = playerVelocity;
             }
-            else if (_allowDoubleJump)
-            {
-                _animatorManager._animator.SetBool("isJumping", true);
-                _animatorManager.PlayTargetAnimation("Jump", false);
-
-                float jumpingVelocity = Mathf.Sqrt(-2 * gravityIntensity * secondJumpHight);
-                Vector3 playerVelocity = _moveDirection;
-                playerVelocity.y = jumpingVelocity;
-                _rb.velocity = playerVelocity;
-                _allowDoubleJump = false;
-            }
         }
 
+        private IEnumerator TimeInJump()
+        {
+            yield return new WaitForSeconds(0.2f);
+
+            IsJumping = false;
+        }
+        
         private bool CheckSurface(int layer)
         {
             RaycastHit hit;

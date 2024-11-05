@@ -16,8 +16,6 @@ namespace ScriptsMisha
         private Player1 _player;
         private Animator _anim;
 
-        private static readonly int Crouching = Animator.StringToHash("isCrouching");
-        
         public Vector2 movementInput;
         public float moveAmount;
         public float verticalInput;
@@ -35,7 +33,7 @@ namespace ScriptsMisha
         {
             _animatorManager = GetComponent<AnimatorManager>();
             _cam = GetComponent<CameraController>();
-            _anim = GetComponent<Animator>();
+            _anim = GetComponentInChildren<Animator>();
             _playerActions = GetComponent<PlayerActions>();
             _ammoSystem = GetComponentInChildren<AmmoSystem>();
             _playerLococmotion = GetComponent<PlayerLocomotion>();
@@ -89,24 +87,26 @@ namespace ScriptsMisha
             verticalInput = movementInput.y;
             horizontalalInput = movementInput.x;
             moveAmount = Mathf.Clamp01(Mathf.Abs(horizontalalInput) + Mathf.Abs(verticalInput));
-            _animatorManager.UpdateAnimatorValues(horizontalalInput, verticalInput, _playerLococmotion.IsSprinting);
+            _anim.SetFloat("MoveAmount", moveAmount);
         }
 
         private void HandleSprintingInput()
         {
-            if (shift_Input && moveAmount > 0.5f && _playerLococmotion.IsGrounded && verticalInput >= 0)
+            if (shift_Input && moveAmount > 0.5f && _playerLococmotion.IsGrounded && verticalInput >= 0 && !_anim.GetBool("Reload"))
             {
                 _playerLococmotion.IsSprinting = true;
+                _anim.SetBool("IsRun", true);
             }
             else
             {
                 _playerLococmotion.IsSprinting = false;
+                _anim.SetBool("IsRun", false);
             }
         }
 
         private void HandleJumpingInput()
         {
-            if (space_Input)
+            if (space_Input && !_anim.GetBool("Reload"))
             {
                 space_Input = false;
                 _playerLococmotion.HandleJumping();
@@ -118,12 +118,10 @@ namespace ScriptsMisha
             if (ctrl_Input)
             {
                 _playerLococmotion.IsCrouching = true;
-                _anim.SetBool(Crouching, ctrl_Input);
             }
             else
             {
                 _playerLococmotion.IsCrouching = false;
-                _anim.SetBool(Crouching, ctrl_Input);
             }
         }
 
@@ -138,26 +136,30 @@ namespace ScriptsMisha
         
         private void HandleFireInput()
         {
-            if (lb_Input)
+            if (lb_Input && !_anim.GetBool("Reload"))
             {
                 weapon.IsFire = true;
+                _anim.SetBool("IsShooting", true);
             }
             else
             {
                 weapon.IsFire = false;
+                _anim.SetBool("IsShooting", false);
             }
         }
 
         private void HandleAimInput()
         {
-            if (rb_Input && !ctrl_Input)
+            if (rb_Input && !ctrl_Input && !_anim.GetBool("Reload"))
             {
                 _playerLococmotion.IsAiming = true;
                 _playerActions.IsAiming = true;
+                _anim.SetBool("IsAim", true);
                 _playerActions.HandleAiming();
             }
             else
             {
+                _anim.SetBool("IsAim", false);
                 _playerLococmotion.IsAiming = false;
                 _playerActions.IsAiming = false;
             }

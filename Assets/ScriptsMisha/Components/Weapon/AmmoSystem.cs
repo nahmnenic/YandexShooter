@@ -9,6 +9,7 @@ namespace ScriptsMisha.Components.Weapon
         public int currentAmmo;
         public int clipSize;
         public int extraAmmo;
+        private Animator _anim;
         
 
         [Header("Fire")]
@@ -26,6 +27,7 @@ namespace ScriptsMisha.Components.Weapon
         {
             currentAmmo = clipSize;
             _ui = FindObjectOfType<UIGame>();
+            _anim = GetComponent<Animator>();
         }
 
         public void Reload()
@@ -35,6 +37,7 @@ namespace ScriptsMisha.Components.Weapon
                 int ammoToReaload = clipSize - currentAmmo;
                 extraAmmo -= ammoToReaload;
                 currentAmmo += ammoToReaload;
+                _anim.SetBool("Reload", true);
             }
             else if (extraAmmo > 0)
             {
@@ -43,13 +46,20 @@ namespace ScriptsMisha.Components.Weapon
                     int leftOverAmmo = extraAmmo + currentAmmo - clipSize;
                     extraAmmo = leftOverAmmo;
                     currentAmmo = clipSize;
+                    _anim.SetBool("Reload", true);
                 }
                 else
                 {
                     currentAmmo += extraAmmo;
                     extraAmmo = 0;
+                    _anim.SetBool("Reload", true);
                 }
             }
+        }
+
+        public void ReloadAimation()
+        {
+            _anim.SetBool("Reload", false);
         }
     }
 }
