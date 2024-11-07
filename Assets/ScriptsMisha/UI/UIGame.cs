@@ -22,11 +22,12 @@ namespace ScriptsMisha.UI
         {
             _bullet.value = bullet;
         }
+        
+        
 
         public void ExitGame()
         {
             Application.Quit();
-            Debug.Log("wdwe");
         }
     }
 }

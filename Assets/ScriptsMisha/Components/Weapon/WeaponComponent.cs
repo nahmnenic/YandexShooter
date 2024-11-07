@@ -7,12 +7,12 @@ namespace ScriptsMisha.Components.Weapon
     {
         [SerializeField] private bool _addBulletSpread = true;
         [SerializeField] private Vector3 _bulletSpreadVariance = new Vector3(0.1f, 0.1f, 0.1f);
-        //[SerializeField] private ParticleSystem ShootingSystem;
         [SerializeField] private Transform BulletSpawnPoint;
         [SerializeField] private ParticleSystem ImpactParticleSystem;
         [SerializeField] private TrailRenderer BulletTrail;
 
         private CameraController _camCont;
+        private Animator _anim;
         private AmmoSystem _ammo;
         [SerializeField] private ParticleSystem _particle;
 
@@ -31,6 +31,7 @@ namespace ScriptsMisha.Components.Weapon
 
         private void Awake()
         {
+            _anim = GetComponent<Animator>();
             _ammo = GetComponent<AmmoSystem>();
             _camCont = GetComponentInParent<CameraController>();
         }
@@ -42,14 +43,7 @@ namespace ScriptsMisha.Components.Weapon
 
         private void Update()
         {
-            /*Ray ray = default;
-            ray.origin = _midBody.transform.position;
-            ray.direction = GetDirection();
-            Debug.DrawRay(ray.origin, ray.direction, Color.red, 10000f);*/
-            
             if (ShouldFire()) Fire();
-            if (IsFire && _ammo.currentAmmo > 0) _ammo.Fire = true;
-            else _ammo.Fire = false;
         }
 
         private bool ShouldFire()
@@ -64,18 +58,19 @@ namespace ScriptsMisha.Components.Weapon
 
         private void Fire()
         {
+            _anim.SetBool("IsShooting", true);
             barrelPos.LookAt(_camCont.aimPos);
             _particle.Play();
             Vector3 fireDirection = GetDirection();
             RaycastHit hit;
             if (Physics.Raycast(_midBody.transform.position, fireDirection, out hit, _mask))
             {
+                _ammo.currentAmmo--;
                 _fireRateTimer = 0;
                 var enemy = hit.transform.TryGetComponent(out HealthComponent healthComponent);
                 if (enemy)
                 {
                     healthComponent.ModifyHealth(damage);
-                    _ammo.currentAmmo--;
                 }
                 else
                 {

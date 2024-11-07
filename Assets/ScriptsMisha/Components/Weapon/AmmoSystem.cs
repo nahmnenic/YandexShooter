@@ -13,13 +13,10 @@ namespace ScriptsMisha.Components.Weapon
         
 
         [Header("Fire")]
-        public bool Fire;
         private float _progressFire;
-        public float timeFire;
-        
+
         [Header("Reload")]
         private float _progressReload;
-        public float timeReload;
 
         private UIGame _ui;
 

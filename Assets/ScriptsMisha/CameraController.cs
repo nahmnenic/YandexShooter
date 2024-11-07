@@ -14,7 +14,7 @@ namespace ScriptsMisha
         private GameObject _enemyMid;
         private float _progressRotate;
 
-        [SerializeField] private Transform _currentGun;
+        public Transform _currentGun;
 
         [Header("RayCast Aim")]
         [SerializeField] private float _aimSmoothSpeed;

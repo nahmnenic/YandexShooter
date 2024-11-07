@@ -9,12 +9,12 @@ namespace ScriptsMisha
         private InputSystem _inputSystem;
         private PlayerLocomotion _playerLococmotion;
         private PlayerActions _playerActions;
-        private WeaponComponent weapon;
-        private AmmoSystem _ammoSystem;
+        public WeaponComponent weapon;
+        public AmmoSystem _ammoSystem;
         private CameraController _cam;
         private AnimatorManager _animatorManager;
         private Player1 _player;
-        private Animator _anim;
+        [HideInInspector] public Animator _anim;
 
         public Vector2 movementInput;
         public float moveAmount;
@@ -33,12 +33,9 @@ namespace ScriptsMisha
         {
             _animatorManager = GetComponent<AnimatorManager>();
             _cam = GetComponent<CameraController>();
-            _anim = GetComponentInChildren<Animator>();
             _playerActions = GetComponent<PlayerActions>();
-            _ammoSystem = GetComponentInChildren<AmmoSystem>();
             _playerLococmotion = GetComponent<PlayerLocomotion>();
             _player = GetComponent<Player1>();
-            weapon = GetComponentInChildren<WeaponComponent>();
         }
 
         private void OnEnable()
@@ -139,7 +136,6 @@ namespace ScriptsMisha
             if (lb_Input && !_anim.GetBool("Reload"))
             {
                 weapon.IsFire = true;
-                _anim.SetBool("IsShooting", true);
             }
             else
             {
