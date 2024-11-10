@@ -4,6 +4,7 @@ using ScriptsMisha.Components.SpawnObjects;
 using ScriptsMisha.Utils;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 namespace ScriptsMisha.Mob
 {
@@ -37,7 +38,7 @@ namespace ScriptsMisha.Mob
         private Coroutine _currentCor;
         private GameObject _target;
         private Animator _animator;
-        private SpawnListComponent _spawn;
+        private SpawnListComponent[] _spawn;
         public NavMeshAgent Agent;
 
 
@@ -47,13 +48,15 @@ namespace ScriptsMisha.Mob
             _animator = GetComponent<Animator>();
             _patrol = GetComponent<Patrol>();
             _player = FindObjectOfType<Player1>().transform;
-            _spawn = FindObjectOfType<SpawnListComponent>();
+            //_spawn = FindObjectOfType<SpawnListComponent>();
+            _spawn = FindObjectsOfType<SpawnListComponent>();
         }
 
         private void Start()
         {
             if (SpawnerMob)
             {
+                StartState(GoToPlayer());
             }
             else
             {
@@ -78,7 +81,7 @@ namespace ScriptsMisha.Mob
         
         private IEnumerator GoToPlayer()
         {
-            while (Vision.IsTouchingLayer)
+            while (true)
             {
                 _animator.SetBool("MelleAttack", false);
                 if (_canAttack.IsTouchingLayer)
@@ -140,12 +143,10 @@ namespace ScriptsMisha.Mob
         {
             isHit = true;
             _mob.SetDirection(Vector3.zero);
-            Agent.isStopped = true;
-            _mob.currentSpeed = 0f;
+            _mob.currentSpeed = _mob.walkingSpeed;
             SetSpeed();
             _animator.SetTrigger(Hit1);
             yield return new WaitForSeconds(0.667f);
-            Agent.isStopped = false;
             isHit = false;
             StartState(GoToPlayer());
         }
@@ -156,7 +157,8 @@ namespace ScriptsMisha.Mob
             if (SpawnerMob)
             {
                 yield return new WaitForSeconds(.1f);
-                _spawn.Spawn();
+                var spawn = Random.Range(0, _spawn.Length);
+                _spawn[spawn].Spawn();
             }
             _animator.SetBool(IsDieKey, true);
             yield return new WaitForSeconds(5);

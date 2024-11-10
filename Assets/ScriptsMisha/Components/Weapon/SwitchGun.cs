@@ -6,13 +6,13 @@ namespace ScriptsMisha.Components.Weapon
     public class SwitchGun : MonoBehaviour
     {
         public GameObject[] _guns;
-        public GameObject _currentGun;
-        private InputManager _animator;
+        [HideInInspector] public GameObject currentGun;
+        private InputManager _inputManager;
         private CameraController _camera;
 
         private void Start()
         {
-            _animator = GetComponentInParent<InputManager>();
+            _inputManager = GetComponentInParent<InputManager>();
             _camera = GetComponentInParent<CameraController>();
             Switch();
         }
@@ -23,11 +23,11 @@ namespace ScriptsMisha.Components.Weapon
             {
                 if (gun.activeSelf)
                 {
-                    _animator._anim = gun.GetComponent<Animator>();
-                    _animator.weapon = gun.GetComponent<WeaponComponent>();
-                    _animator._ammoSystem = gun.GetComponent<AmmoSystem>();
+                    _inputManager._anim = gun.GetComponent<Animator>();
+                    _inputManager.weapon = gun.GetComponent<WeaponComponent>();
+                    _inputManager._ammoSystem = gun.GetComponent<AmmoSystem>();
                     _camera._currentGun = gun.transform;
-                    //_currentGun = gun;
+                    currentGun = gun;
                 }
             }
         }

@@ -11,12 +11,14 @@ namespace ScriptsMisha.UI
 
         public void Select(int id)
         {
+            _selection.gameObject.SetActive(true);
             _switch._guns[id].SetActive(true);
             _switch.Switch();
         }
         
         public void DeSelect(int id)
         {
+            _selection.gameObject.SetActive(false);
             _switch._guns[id].SetActive(false);
             _switch.Switch();
         }

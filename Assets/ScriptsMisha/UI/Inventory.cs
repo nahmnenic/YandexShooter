@@ -8,7 +8,7 @@ namespace ScriptsMisha.UI
     {
         [SerializeField] private Transform _horizontalGroup;
         public Transform[] _items;
-        private int _currentItem = 1;
+        private int _currentItem;
         private int _lastKeyPressed;
         private InputSystem _inputSystem;
 

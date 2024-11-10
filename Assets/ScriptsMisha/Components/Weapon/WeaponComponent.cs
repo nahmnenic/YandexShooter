@@ -71,11 +71,13 @@ namespace ScriptsMisha.Components.Weapon
                 if (enemy)
                 {
                     healthComponent.ModifyHealth(damage);
+                    TrailRenderer trail = Instantiate(BulletTrail, BulletSpawnPoint.position, Quaternion.identity);
+                    StartCoroutine(SpawnTrail(trail, hit, true));
                 }
                 else
                 {
                     TrailRenderer trail = Instantiate(BulletTrail, BulletSpawnPoint.position, Quaternion.identity);
-                    StartCoroutine(SpawnTrail(trail, hit));
+                    StartCoroutine(SpawnTrail(trail, hit, false));
                 }
             }
         }
@@ -98,7 +100,7 @@ namespace ScriptsMisha.Components.Weapon
             return direction;
         }
 
-        private IEnumerator SpawnTrail(TrailRenderer Trail, RaycastHit hit)
+        private IEnumerator SpawnTrail(TrailRenderer Trail, RaycastHit hit, bool enemy)
         {
             float time = 0;
             Vector3 StartPos = Trail.transform.position;
@@ -110,10 +112,14 @@ namespace ScriptsMisha.Components.Weapon
 
                 yield return null;
             }
-
-            Trail.transform.position = hit.point;
-            Instantiate(ImpactParticleSystem, hit.point, Quaternion.LookRotation(hit.normal));
             
+            Trail.transform.position = hit.point;
+
+            if (!enemy)
+            {
+                Instantiate(ImpactParticleSystem, hit.point, Quaternion.LookRotation(hit.normal));
+            }
+
             Destroy(Trail.gameObject, Trail.time);
         }
     }
