@@ -96,8 +96,6 @@ namespace ScriptsMisha.Mob
                 
                 yield return null;
             }
-            
-            StartState(_patrol.DoPatrol());
         }
 
         private IEnumerator RangeAttack()

@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,40 +10,32 @@ namespace ScriptsMisha.UI
         public Transform[] _items;
         private int _currentItem;
         private int _lastKeyPressed;
-        private InputSystem _inputSystem;
+        private List<int> _pressedKeys = new List<int>();
 
-        private void OnEnable()
+        private void Update()
         {
-            if (_inputSystem == null)
+            _pressedKeys.Clear();
+            
+            if (Keyboard.current.digit1Key.isPressed) _pressedKeys.Add(1);
+            if (Keyboard.current.digit2Key.isPressed) _pressedKeys.Add(2);
+            if (Keyboard.current.digit3Key.isPressed) _pressedKeys.Add(3);
+            if (Keyboard.current.digit4Key.isPressed) _pressedKeys.Add(4);
+            if (Keyboard.current.digit5Key.isPressed) _pressedKeys.Add(5);
+            if (Keyboard.current.digit6Key.isPressed) _pressedKeys.Add(6);
+            if (Keyboard.current.digit7Key.isPressed) _pressedKeys.Add(7);
+            if (Keyboard.current.digit8Key.isPressed) _pressedKeys.Add(8);
+            if (Keyboard.current.digit9Key.isPressed) _pressedKeys.Add(9);
+
+
+            if (_pressedKeys.Count > 0)
             {
-                _inputSystem = new InputSystem();
+                _lastKeyPressed = _pressedKeys[_pressedKeys.Count - 1];
 
-                _inputSystem.PlayerActions.Numbers.performed += context => CheckKeyPressed();
+                if (_lastKeyPressed != _currentItem)
+                {
+                    SelectItems();
+                }
             }
-
-            _inputSystem.Enable();
-        }
-
-        private void CheckKeyPressed()
-        {
-            if (Keyboard.current.digit1Key.wasPressedThisFrame) _lastKeyPressed = 1;
-            else if (Keyboard.current.digit2Key.wasPressedThisFrame) _lastKeyPressed = 2;
-            else if (Keyboard.current.digit3Key.wasPressedThisFrame) _lastKeyPressed = 3;
-            else if (Keyboard.current.digit4Key.wasPressedThisFrame) _lastKeyPressed = 4;
-            else if (Keyboard.current.digit5Key.wasPressedThisFrame) _lastKeyPressed = 5;
-            else if (Keyboard.current.digit6Key.wasPressedThisFrame) _lastKeyPressed = 6;
-            else if (Keyboard.current.digit7Key.wasPressedThisFrame) _lastKeyPressed = 7;
-            else if (Keyboard.current.digit8Key.wasPressedThisFrame) _lastKeyPressed = 8;
-            else if (Keyboard.current.digit9Key.wasPressedThisFrame) _lastKeyPressed = 9;
-            else return;
-
-            if (_lastKeyPressed == _currentItem) return;
-            SelectItems();
-        }
-
-        private void OnDisable()
-        {
-            _inputSystem.Disable();
         }
 
         private void SelectItems()

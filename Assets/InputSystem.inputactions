@@ -313,15 +313,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Numbers",
-                    "type": "Button",
-                    "id": "c34dd54d-3037-45e1-8aed-3a23cadca6cc",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -465,17 +456,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Reload",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "99a5f271-f828-49bc-aadf-57a6d4027fd0",
-                    "path": "<Keyboard>/anyKey",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Numbers",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

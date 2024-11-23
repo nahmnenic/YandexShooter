@@ -335,15 +335,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Numbers"",
-                    ""type"": ""Button"",
-                    ""id"": ""c34dd54d-3037-45e1-8aed-3a23cadca6cc"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -489,17 +480,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
                     ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""99a5f271-f828-49bc-aadf-57a6d4027fd0"",
-                    ""path"": ""<Keyboard>/anyKey"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Numbers"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -519,7 +499,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         m_PlayerActions_Aim = m_PlayerActions.FindAction("Aim", throwIfNotFound: true);
         m_PlayerActions_Crouch = m_PlayerActions.FindAction("Crouch", throwIfNotFound: true);
         m_PlayerActions_Reload = m_PlayerActions.FindAction("Reload", throwIfNotFound: true);
-        m_PlayerActions_Numbers = m_PlayerActions.FindAction("Numbers", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -642,7 +621,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerActions_Aim;
     private readonly InputAction m_PlayerActions_Crouch;
     private readonly InputAction m_PlayerActions_Reload;
-    private readonly InputAction m_PlayerActions_Numbers;
     public struct PlayerActionsActions
     {
         private @InputSystem m_Wrapper;
@@ -654,7 +632,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         public InputAction @Aim => m_Wrapper.m_PlayerActions_Aim;
         public InputAction @Crouch => m_Wrapper.m_PlayerActions_Crouch;
         public InputAction @Reload => m_Wrapper.m_PlayerActions_Reload;
-        public InputAction @Numbers => m_Wrapper.m_PlayerActions_Numbers;
         public InputActionMap Get() { return m_Wrapper.m_PlayerActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -685,9 +662,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Reload.started += instance.OnReload;
             @Reload.performed += instance.OnReload;
             @Reload.canceled += instance.OnReload;
-            @Numbers.started += instance.OnNumbers;
-            @Numbers.performed += instance.OnNumbers;
-            @Numbers.canceled += instance.OnNumbers;
         }
 
         private void UnregisterCallbacks(IPlayerActionsActions instance)
@@ -713,9 +687,6 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
             @Reload.started -= instance.OnReload;
             @Reload.performed -= instance.OnReload;
             @Reload.canceled -= instance.OnReload;
-            @Numbers.started -= instance.OnNumbers;
-            @Numbers.performed -= instance.OnNumbers;
-            @Numbers.canceled -= instance.OnNumbers;
         }
 
         public void RemoveCallbacks(IPlayerActionsActions instance)
@@ -747,6 +718,5 @@ public partial class @InputSystem: IInputActionCollection2, IDisposable
         void OnAim(InputAction.CallbackContext context);
         void OnCrouch(InputAction.CallbackContext context);
         void OnReload(InputAction.CallbackContext context);
-        void OnNumbers(InputAction.CallbackContext context);
     }
 }
